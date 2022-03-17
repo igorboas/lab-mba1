@@ -29,8 +29,6 @@ O procedimento de inscrição pode ser descrito em 6 passos simples:
 
 Vamos executar a demo num Kubernetes, de acordo com o apresentado abaixo:
 
-- [Kubernetes](https://github.com/aborigene/otel-demo/tree/master/kubernetes)
-
 Para subir o ambiente vamos executar os passos abaixo
 
 1. Setup do Graylog
@@ -144,7 +142,7 @@ kubectl apply -f fluent-bit-cm.yaml
 kubectl apply -f fluent-bit-graylog-ds.yaml
 ```
 
-2. Setup do Prometheus
+3. Setup do Prometheus
 
 ```
 cd <raiz do repositorio>/kubernetes/prometheus
@@ -162,7 +160,7 @@ kubectl get service/prometheus-service -n monitoring
 
 Apontar o navegador para o IP/porta para acessar o serviço
 
-3. Setup do Jaegger
+4. Setup do Jaegger
 
 ```
 cd <raiz do repositorio>/kubernetes/jaeger
@@ -178,7 +176,7 @@ kubectl get service/jaeger-query -n monitoring
 
 Apontar o navegador para o IP/porta para acessar o serviço
 
-4. Setup do Grafana
+5. Setup do Grafana
 
 ```
 cd <raiz do repositorio>/kubernetes/grafana
@@ -195,7 +193,15 @@ kubectl get service/grafana -n monitoring
 
 Apontar o navegador para o IP/porta para acessar o serviço
 
-5. Setup da Aplicação
+6. Setup da Aplicação
+
+```
+cd <raiz do repositorio>/kubernetes/services
+kubectl apply -f .
+```
+
+A aplicão não tem interface exposta, o gerador de carga irá gerar tráfego para os testes.
+
 
 ### Tendo problemas ou dificuldades ou encontrou um bug?
 
