@@ -27,7 +27,22 @@ O procedimento de inscrição pode ser descrito em 6 passos simples:
 
 ## Executar a Demo
 
-Vamos executar a demo num Kubernetes, de acordo com o apresentado abaixo:
+Vamos executar a demo num Kubernetes, de acordo com o apresentado abaixo. Recomendo o uso do minikube, assim não temos problemas de acessso. Sendo assim deve ser seguido o passo a passo de instalação do minikube e em seguida a sua subida conforme o comando abaixo:
+
+```
+minikube start --memory 6096 --addons=ingress
+```
+
+Se der um erro reclamando da quantidade de memória, diminuir para 4096 ou deixar sem o parâmetro da memória, mas pode ser que o cluster fique sobrecarregado durante as atividades e pare de rodar.
+
+Depois que o minikube subir rodar em um terminar separado o seguinte comando:
+
+```
+minikube tunnel
+```
+
+Este comando permitirá o acesso às aplicações rodando dentro do cluster Kubernetes.
+
 
 Para subir o ambiente vamos executar os passos abaixo
 
@@ -65,13 +80,13 @@ Para implantar a pilha, você cria um deploy kubernetes da seguinte maneira:
 kubectl create ns graylog
 kubectl create -f es-deploy.yaml
 kubectl create -f mongo-deploy.yaml
-kubectl create -f graylog-deploy.yaml
+kubectl apply -f graylog-deploy.yaml
 ```
 
 Para o acesso funcionar precisamos fazer um ajuste, precisamos pegar o IP real do meu serviço e atualizar a configuração, para isso execute o seguinte comando:
 
 ```
-kubectl get all
+kubectl get all -n graylog
 ```
 
 Procure na lista o IP real, altere o arquivo graylog-deploy.yaml
@@ -84,13 +99,13 @@ Procure na lista o IP real, altere o arquivo graylog-deploy.yaml
 Você pode verificar a implantação usando o seguinte comando:
 
 ```
- kubectl get deploy
+ kubectl get deploy -n graylog
 ```
  
 Você também pode verificar os pods criados por estes deploys:
 
 ```
- kubectl get pods
+ kubectl get pods -n graylog
 ```
  
 #### Faça login na interface web do Graylog:
@@ -117,9 +132,9 @@ Para fazer isso:
 ```
 cd <base do repositorio>/kubernetes/fluentbit
 kubectl create namespace logging
-kubectl create -f service-account.yaml
+kubectl apply -f service-account.yaml
 kubectl apply -f rbac-role.yam
-kubectl create -f role-binding.yaml
+kubectl apply -f role-binding.yaml
 ```
 
 Editar o arquivo fluent-bit-cm.yaml na sessão output-graylog.conf adicionar o ip interno do serviço do Graylog e a porta da input, como apresentado na interface, ficará algo assim:
@@ -162,19 +177,45 @@ Apontar o navegador para o IP/porta para acessar o serviço
 
 4. Setup do Jaegger
 
+Instalar o cert manager:
+```
+kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.6.2/cert-manager.yaml
+```
+
+Configurar um ingress controller, no minikube usar o parâmetro
+```
+--addons=ingress
+```
+Seguir com a aplicação dos arquivos:
+
 ```
 cd <raiz do repositorio>/kubernetes/jaeger
-kubectl.exe apply -f jaeger-all-in-one.yaml -n monitoring
 
+kubectl create namespace observability
+kubectl create -f https://github.com/jaegertracing/jaeger-operator/releases/download/v1.32.0/jaeger-operator.yaml -n observability
+
+```
+Verificar que operator está rodando:
+```
+kubectl get deployment jaeger-operator -n observability
+```
+
+Criar o Jaeger:
+```
+kubectl apply -f jaeger.yaml -n observability
 ```
 
 Aguardar alguns minutos e verificar a IP/porta em que o serviço do Jaeger está exposto:
 
 ```
-kubectl get service/jaeger-query -n monitoring 
+kubectl get service/simplest-query -n monitoring 
+```
+ou
+```
+kubectl get ingress -n observability
 ```
 
-Apontar o navegador para o IP/porta para acessar o serviço
+Apontar o navegador para o IP/porta para acessar o serviço, pode ser o IP do seriço ou do Ingress
 
 5. Setup do Grafana
 
@@ -193,11 +234,22 @@ kubectl get service/grafana -n monitoring
 
 Apontar o navegador para o IP/porta para acessar o serviço
 
+A senha padrão para o primeiro login é:
+User: admin
+Senha: admin
+
 6. Setup da Aplicação
 
 ```
 cd <raiz do repositorio>/kubernetes/services
 kubectl apply -f .
+```
+
+7. Setup do coletor OpentTelemetry
+
+```
+cd <raiz do repositorio>/kubernetes/opentelemetry
+kubectl apply -f opentelemetry-collector.yaml 
 ```
 
 A aplicão não tem interface exposta, o gerador de carga irá gerar tráfego para os testes.
