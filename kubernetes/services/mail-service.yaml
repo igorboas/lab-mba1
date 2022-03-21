@@ -60,6 +60,10 @@ spec:
           env:
             - name: DT_INJECTION_RULES
               value: ::EXCLUDE:ALL,,
+            - name: JAEGER_AGENT_HOST
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.hostIP 
           ports:
             - name: http
               containerPort: 4100

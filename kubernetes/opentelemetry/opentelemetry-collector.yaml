@@ -21,9 +21,8 @@ data:
         endpoint: '${OTEL_ENDPOINT_URL}'
         headers: { 'Authorization': '${OTEL_AUTH_HEADER}' }
       jaeger:
-        endpoint: "jaeger-all-in-one:14268"
+        endpoint: "jaeger-collector.monitoring:14267"
         insecure: true
-
       logging:
         loglevel: debug
         sampling_initial: 5
@@ -34,7 +33,7 @@ data:
         traces:
           receivers: [otlp]
           processors: [batch]
-          exporters: [otlphttp, logging]
+          exporters: [otlphttp, logging, jaeger]
 
 ---
 apiVersion: v1

@@ -115,11 +115,11 @@ Para fazer isso:
 2. Setup do FluentBit
 
 ```
-kubectl create namespace logging
-kubectl create -f https://raw.githubusercontent.com/fluent/fluent-bit-kubernetes-logging/master/fluent-bit-service-account.yaml
-kubectl create -f https://raw.githubusercontent.com/fluent/fluent-bit-kubernetes-logging/master/fluent-bit-role.yaml
-kubectl create -f https://raw.githubusercontent.com/fluent/fluent-bit-kubernetes-logging/master/fluent-bit-role-binding.yaml
 cd <base do repositorio>/kubernetes/fluentbit
+kubectl create namespace logging
+kubectl create -f service-account.yaml
+kubectl apply -f rbac-role.yam
+kubectl create -f role-binding.yaml
 ```
 
 Editar o arquivo fluent-bit-cm.yaml na sessão output-graylog.conf adicionar o ip interno do serviço do Graylog e a porta da input, como apresentado na interface, ficará algo assim:
