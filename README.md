@@ -254,6 +254,23 @@ kubectl apply -f opentelemetry-collector.yaml
 
 A aplicão não tem interface exposta, o gerador de carga irá gerar tráfego para os testes.
 
+### Exercício extra - Envio de logs vai HTTP
+
+O objetivo deste exercício é executar o envio de logs vai HTTP, apenas para demonstrar outra forma de enviar logs para o graylog.
+
+Para isso temos um job que gera logs aleatórios ao ambiente, para iniciar esse job deve-se executar:
+
+```
+cd <raiz do repositório>/kubernetes/graylog
+kubectl create -f cronJob.yaml
+```
+
+Nesse momento como estão os logs no graylog? O que está faltando?
+
+Como podemos melhorara a visualização e filtragem desses logs?
+
+Analise um pouco, e depois veja o que fazer nesse documento: GraylogExecicioExtra.md [GraylogExecicioExtra.md](https://github.com/aborigene/otel-demo/blob/master/kubernetes/graylog/GraylogExecicioExtra.md) for more details.
+
 
 ### Tendo problemas ou dificuldades ou encontrou um bug?
 
