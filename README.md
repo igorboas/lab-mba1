@@ -269,7 +269,7 @@ Nesse momento como estão os logs no graylog? O que está faltando?
 
 Como podemos melhorara a visualização e filtragem desses logs?
 
-Analise um pouco, e depois veja o que fazer nesse documento: GraylogExecicioExtra.md [GraylogExecicioExtra.md](https://github.com/aborigene/otel-demo/blob/master/kubernetes/graylog/GraylogExecicioExtra.md) for more details.
+Analise um pouco e tente entender o que está acontecendo, depois veja os detalhes desse laboratório nesse documento: GraylogExecicioExtra.md [GraylogExecicioExtra.md](https://github.com/aborigene/otel-demo/blob/master/kubernetes/graylog/GraylogExecicioExtra.md) for more details.
 
 
 ### Tendo problemas ou dificuldades ou encontrou um bug?
