@@ -8,6 +8,7 @@ data:
   REDIS_HOST: redis
   REDIS_PORT: '6379'
   REDIS_DB: '2'
+  OTEL_ENDPOINT_URL: grpc://otel-collector.otel:4317
 
 ---
 apiVersion: v1

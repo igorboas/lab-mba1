@@ -17,9 +17,9 @@ data:
       batch:
 
     exporters:
-      otlphttp:
-        endpoint: '${OTEL_ENDPOINT_URL}'
-        headers: { 'Authorization': '${OTEL_AUTH_HEADER}' }
+      #otlphttp:
+      #  endpoint: '${OTEL_ENDPOINT_URL}'
+      #  headers: { 'Authorization': '${OTEL_AUTH_HEADER}' }
       jaeger:
         endpoint: "simplest-collector.observability:14250"
         insecure: true
@@ -33,7 +33,7 @@ data:
         traces:
           receivers: [otlp]
           processors: [batch]
-          exporters: [otlphttp, logging, jaeger]
+          exporters: [logging, jaeger]
 
 ---
 apiVersion: v1
