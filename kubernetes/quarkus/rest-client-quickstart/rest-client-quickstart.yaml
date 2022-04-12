@@ -47,7 +47,7 @@ spec:
     spec:
       containers:
         - name: rest-client-quickstart
-          image: igoroschsimoes/rest-client-quickstart:v0.4
+          image: igoroschsimoes/rest-client-quickstart:v0.5
           resources: {}
           envFrom:
             - configMapRef:
