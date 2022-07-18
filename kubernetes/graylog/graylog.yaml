@@ -1,0 +1,61 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: graylog-config
+data:
+  PORT: '4000'
+  DB_CONNECTION_URL: mongodb://graylog:swordfish@mongo:27017/graylog
+  MAIL_SERVICE_BASE_URL: http://mail-service:4100
+  VERIFICATION_SERVICE_URL: verification-service:4010
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: graylog
+  labels:
+    app: graylog
+spec:
+  selector:
+    app: graylog
+  ports:
+    - name: http
+      port: 4000
+      targetPort: http
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: graylog
+    app.kubernetes.io/name: graylog
+    app.kubernetes.io/version: latest
+    app.kubernetes.io/component: service
+    app.kubernetes.io/part-of: opentelemetry-demo
+    app.kubernetes.io/managed-by: manifests
+    app.kubernetes.io/created-by: admin
+  name: graylog
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: graylog
+  template:
+    metadata:
+      labels:
+        app: graylog
+    spec:
+      containers:
+        - name: graylog
+          image: graylog/graylog:4.2
+          command: "/usr/bin/tini -- wait-for-it elasticsearch:9200 --  /docker-entrypoint.sh"
+          resources: {}
+          envFrom:
+            - configMapRef:
+                name: graylog-config
+          ports:
+            - name: http
+              containerPort: 4000
+              protocol: TCP

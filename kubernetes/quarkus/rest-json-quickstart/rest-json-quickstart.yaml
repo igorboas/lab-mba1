@@ -1,0 +1,58 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: rest-json-quickstart-config
+data:
+  OTEL_ENDPOINT_URL: grpc://otel-collector.otel:4317
+  NATIVE: 0
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rest-json-quickstart
+  labels:
+    app: rest-json-quickstart
+spec:
+  selector:
+    app: rest-json-quickstart
+  ports:
+    - name: http
+      port: 8087
+      targetPort: http
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: rest-json-quickstart
+    app.kubernetes.io/name: rest-json-quickstart
+    app.kubernetes.io/version: latest
+    app.kubernetes.io/component: service
+    app.kubernetes.io/part-of: opentelemetry-demo
+    app.kubernetes.io/managed-by: manifests
+    app.kubernetes.io/created-by: admin
+  name: rest-json-quickstart
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rest-json-quickstart
+  template:
+    metadata:
+      labels:
+        app: rest-json-quickstart
+    spec:
+      containers:
+        - name: rest-json-quickstart
+          image: igoroschsimoes/rest-json-quickstart:v0.5
+          resources: {}
+          envFrom:
+            - configMapRef:
+                name: rest-json-quickstart-config
+          ports:
+            - name: http
+              containerPort: 8087
+              protocol: TCP

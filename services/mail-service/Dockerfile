@@ -6,7 +6,11 @@ ENV SERVICE_NAME mail-service
 WORKDIR /app
 
 COPY package*.json ./
+<<<<<<< HEAD
 RUN npm install
+=======
+RUN npm ci
+>>>>>>> master
 
 COPY . .
 
