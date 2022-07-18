@@ -69,7 +69,7 @@ services:
   #   build: services/loadgen
   #   # entrypoint: ["tail", "-f", "/dev/null"]
   #   environment:
-  #     - BACKEND_BASE_URL=http://backend:4000
+  #     - BACKEND_BASE_URL=http://backend:4000 teste
 
   otel-collector:
     image: otel/opentelemetry-collector:latest
