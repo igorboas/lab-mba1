@@ -1,12 +1,16 @@
 FROM node:16.13.1-alpine3.14
 
-ENV NODE_ENV production
+ENV NODE_ENV development
 ENV SERVICE_NAME backend
 
 WORKDIR /app
 
 COPY package*.json ./
+<<<<<<< HEAD
+RUN npm install
+=======
 RUN npm ci
+>>>>>>> master
 
 COPY . .
 
